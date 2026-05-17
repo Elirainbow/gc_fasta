@@ -1,15 +1,18 @@
 def leer_fasta(ruta_archivo):
-    """Lee un archivo FASTA y concatena todas las secuencias de DNA.
+    """Lee un archivo FASTA y organiza las secuencias de DNA por identificador.
 
-    Esta función lee un archivo en formato FASTA, ignorando las líneas de
-    encabezado (que comienzan con '>'), y concatena todas las líneas de
-    secuencia en un único string.
+    Esta función lee un archivo en formato FASTA, identificando los encabezados
+    (líneas que comienzan con '>') como identificadores únicos para cada secuencia.
+    Concatena todas las líneas de secuencia correspondientes a cada identificador
+    en un diccionario.
 
     Args:
         ruta_archivo (str): Ruta del archivo FASTA a leer.
 
     Returns:
-        str: String con todas las secuencias de DNA concatenadas.
+        dict: Diccionario donde las claves son los identificadores de secuencias
+            (sin el símbolo '>') y los valores son las secuencias de DNA
+            concatenadas en strings.
     """
     secuencias = {}
     id_actual = None
@@ -38,14 +41,15 @@ def calcular_gc(secuencia):
 
     Cuenta el número de bases G (guanina) y C (citosina) en la secuencia
     y calcula qué porcentaje representan del total de nucleótidos.
-    Esta es una métrica importante para caracterizar secuencias de DNA.
+    Esta es una métrica importante en bioinformática para caracterizar
+    propiedades fisicoquímicas de secuencias de DNA.
 
     Args:
-        secuencia (str): variable que contiene la secuencia de DNA
-        (esperada en mayúsculas) concatenada en la función leer_fasta.
+        secuencia (str): Secuencia de DNA en mayúsculas (típicamente proveniente
+            de leer_fasta).
 
     Returns:
-        float: Porcentaje de GC en la secuencia (0-100).
+        float: Porcentaje de GC en la secuencia, valor entre 0 y 100.
     """
 
     cantidad_g = secuencia.count("G")
@@ -64,12 +68,13 @@ def calcular_gc(secuencia):
 def main():
     """Función principal que integra la lectura FASTA y el cálculo de GC.
 
-    Lee una secuencia de DNA desde un archivo FASTA y calcula el porcentaje
-    de contenido GC, mostrando el resultado en la consola con dos decimales
-    de precisión.
+    Lee todas las secuencias de DNA desde un archivo FASTA, calcula el porcentaje
+    de contenido GC para cada una y muestra los resultados en la consola.
+    Cada resultado se presenta con el identificador de la secuencia seguido
+    del porcentaje de GC con dos decimales de precisión.
 
     Returns:
-        None: Solo imprime el resultado en consola.
+        None: Solo imprime los resultados en consola.
     """
 
     ruta_archivo = "secuencia.fasta"
