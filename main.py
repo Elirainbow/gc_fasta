@@ -11,19 +11,26 @@ def leer_fasta(ruta_archivo):
     Returns:
         str: String con todas las secuencias de DNA concatenadas.
     """
-    secuencia = ""
+    secuencias = {}
+    id_actual = None
 
     with open(ruta_archivo, "r", encoding="utf-8") as archivo:
         for linea in archivo:
             linea = linea.strip()
 
-            if not linea.startswith(">"):
-                secuencia += linea  # La variable `secuencia` es un string, es decir, una cadena de texto. Estaamos concatenando strings.
-    return secuencia
+            if linea.startswith(">"):
+                id_actual = linea[1:]  # Elimina el '>' del identificador
+                secuencias[id_actual] = ""  # Inicializa la secuencia para este ID
+            else:
+                if not linea.startswith(">"):
+                    secuencias[
+                        id_actual
+                    ] += linea  # La variable `secuencia` es un string, es decir, una cadena de texto. Estaamos concatenando strings.
+    return secuencias
 
 
-secuencia = leer_fasta("secuencia.fasta")
-# print(secuencia)
+secuencias = leer_fasta("secuencia.fasta")
+# print(secuencias)
 
 
 def calcular_gc(secuencia):
@@ -64,11 +71,14 @@ def main():
     Returns:
         None: Solo imprime el resultado en consola.
     """
-    ruta_archivo = "secuencia.fasta"
-    secuencia = leer_fasta(ruta_archivo)
-    contenido_gc = calcular_gc(secuencia)
 
-    print(f"la secuencia tiene: {contenido_gc:.2f}% de GC")
+    ruta_archivo = "secuencia.fasta"
+    secuencias = leer_fasta(ruta_archivo)
+
+    for identificador, secuencia in secuencias.items():
+        contenido_gc = calcular_gc(secuencia)
+
+        print(f"{identificador}: {contenido_gc:.2f}% GC")
 
 
 if __name__ == "__main__":
